@@ -4,7 +4,7 @@ golang template for gin framework!
 # Feature
 * Easy and simple to use for gin framework.
 * Use golang html/template syntax.
-* Support master layout file.
+* Support configure master layout file.
 * Support configure template file extension.
 * Support configure templates directory.
 * Support configure cache template.
@@ -30,26 +30,26 @@ golang template for gin framework!
 
 # Render
 
-### Render master
+### Render with master
 ```go
 c.HTML(http.StatusOK, "index", gin.H{})
 ```
 
-### Render file(not master layout)
+### Render only file(not use master layout)
 ```go
 //use full name with extension
 c.HTML(http.StatusOK, "page_file.tpl", gin.H{})
 ```
 
 
-# Include
+# Include syntax
 ```html
 <div>
 {{include "layouts/footer"}}
 </div>
 ```
 
-# Usage
+# Usage basic
 ```go
 
 package main
@@ -58,41 +58,38 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/foolin/gin-template"
 	"net/http"
-	"html/template"
 )
 
 func main() {
 	router := gin.Default()
 
+	//new template engine
 	router.HTMLRender = gintemplate.Default()
-	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
-	router.GET("/test", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index", gin.H{
-			"title": "Main website",
-		})
-	})
 
-	//register router
 	router.GET("/", func(ctx *gin.Context) {
+		//render with master
 		ctx.HTML(http.StatusOK, "index", gin.H{
 			"title": "Index title!",
-			"escape": func(content string) string {
-				return template.HTMLEscapeString(content)
+			"add": func(a int, b int) int {
+				return a + b
 			},
 		})
 	})
 
+
 	router.GET("/page_file", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, page_file.tpl, gin.H{"title": "Page file title!!"})
+		//render only file, must full name with extension
+		ctx.HTML(http.StatusOK, "page_file.html", gin.H{"title": "Page file title!!"})
 	})
 
 	router.Run(":9090")
 }
 
+
 ```
+[Basic example](https://github.com/foolin/gin-template/tree/master/examples/basic)
 
-
-# Advance
+# Usage advance
 ```go
 
 package main
@@ -139,5 +136,5 @@ func main() {
 	router.Run(":9090")
 }
 
-
 ```
+[Advance example](https://github.com/foolin/gin-template/tree/master/examples/advance)
