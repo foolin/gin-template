@@ -9,6 +9,7 @@ golang template for gin framework!
 * Support configure templates directory.
 * Support configure cache template.
 * Support include file.
+* Support dynamic reload template(disable cache mode).
 
 # Configure
 

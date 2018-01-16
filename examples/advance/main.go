@@ -21,7 +21,7 @@ func main() {
 				return a - b
 			},
 		},
-		DisableCache: false,
+		DisableCache: true,
 	})
 
 	router.GET("/", func(ctx *gin.Context) {
