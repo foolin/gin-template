@@ -32,6 +32,7 @@ golang template for gin framework!
 
 ### Render with master
 ```go
+//use name without extension
 c.HTML(http.StatusOK, "index", gin.H{})
 ```
 
@@ -49,7 +50,14 @@ c.HTML(http.StatusOK, "page_file.tpl", gin.H{})
 </div>
 ```
 
-# Usage basic
+# Usage
+
+## Install
+```bash
+go get github.com/foolin/gin-template
+```
+
+## Basic example
 ```go
 
 package main
@@ -89,7 +97,7 @@ func main() {
 ```
 [Basic example](https://github.com/foolin/gin-template/tree/master/examples/basic)
 
-# Usage advance
+## Advance example
 ```go
 
 package main
