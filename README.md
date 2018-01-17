@@ -11,20 +11,53 @@ golang template for gin framework!
 * Support include file.
 * Support dynamic reload template(disable cache mode).
 
+
+
+# Install
+```bash
+go get github.com/foolin/gin-template
+```
+
+# Usage
+```go
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/foolin/gin-template"
+	"net/http"
+)
+
+func main() {
+	router := gin.Default()
+
+	//new template engine
+	router.HTMLRender = gintemplate.Default()
+
+	router.GET("/page", func(ctx *gin.Context) {
+		//render only file, must full name with extension
+		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "Page file title!!"})
+	})
+
+	router.Run(":9090")
+}
+```
+
 # Configure
 
 ```go
-    gintemplate.TemplateConfig{
-		Root:      "views",
-		Extension: ".tpl",
-		Master:    "layouts/master",
-		Partials:  []string{"partials/head"},
+    TemplateConfig{
+		Root:      "views", //template root path
+		Extension: ".tpl", //file extension
+		Master:    "layouts/master", //master layout file
+		Partials:  []string{"partials/head"}, //partial files
 		Funcs: template.FuncMap{
 			"sub": func(a, b int) int {
 				return a - b
 			},
+			// more funcs
 		},
-		DisableCache: false,
+		DisableCache: false, //if disable cache, auto reload template file for debug.
 	}
 ```
 
@@ -51,12 +84,7 @@ c.HTML(http.StatusOK, "page.html", gin.H{})
 </div>
 ```
 
-# Usage
-
-### Install
-```bash
-go get github.com/foolin/gin-template
-```
+# Examples
 
 ### Basic example
 ```go
