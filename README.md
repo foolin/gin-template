@@ -35,7 +35,6 @@ func main() {
 	router.HTMLRender = gintemplate.Default()
 
 	router.GET("/page", func(ctx *gin.Context) {
-		//render only file, must full name with extension
 		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "Page file title!!"})
 	})
 
