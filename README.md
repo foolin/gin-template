@@ -40,7 +40,7 @@ c.HTML(http.StatusOK, "index", gin.H{})
 ### Render only file(not use master layout)
 ```go
 //use full name with extension
-c.HTML(http.StatusOK, "page.tpl", gin.H{})
+c.HTML(http.StatusOK, "page.html", gin.H{})
 ```
 
 
@@ -53,12 +53,12 @@ c.HTML(http.StatusOK, "page.tpl", gin.H{})
 
 # Usage
 
-## Install
+### Install
 ```bash
 go get github.com/foolin/gin-template
 ```
 
-## Basic example
+### Basic example
 ```go
 
 package main
@@ -101,6 +101,7 @@ Project structure:
 |-- app/views/
     |-- layouts/
         |--- footer.html
+        |--- master.html
     |--- index.html          
     |--- page.html
 
@@ -109,7 +110,7 @@ See in "examples/basic" folder
 
 [Basic example](https://github.com/foolin/gin-template/tree/master/examples/basic)
 
-## Advance example
+### Advance example
 ```go
 
 package main
@@ -119,6 +120,7 @@ import (
 	"github.com/foolin/gin-template"
 	"net/http"
 	"html/template"
+	"time"
 )
 
 func main() {
@@ -129,13 +131,16 @@ func main() {
 		Root:      "views",
 		Extension: ".tpl",
 		Master:    "layouts/master",
-		Partials:  []string{"partials/head"},
+		Partials:  []string{"partials/ad"},
 		Funcs: template.FuncMap{
 			"sub": func(a, b int) int {
 				return a - b
 			},
+			"copy": func() string{
+				return time.Now().Format("2006")
+			},
 		},
-		DisableCache: false,
+		DisableCache: true,
 	})
 
 	router.GET("/", func(ctx *gin.Context) {
@@ -163,8 +168,10 @@ Project structure:
 |-- app/views/
     |-- layouts/
         |--- footer.tpl
+        |--- head.tpl
+        |--- master.tpl
     |-- partials/
-            |--- head.tpl
+        |--- ad.tpl
     |--- index.tpl          
     |--- page.tpl
 

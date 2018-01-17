@@ -1,3 +1,11 @@
+/*
+ * Copyright 2018 Foolin.  All rights reserved.
+ *
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ *
+ */
+
 package main
 
 import (
@@ -16,7 +24,7 @@ func main() {
 		Root:      "views",
 		Extension: ".tpl",
 		Master:    "layouts/master",
-		Partials:  []string{"partials/head"},
+		Partials:  []string{"partials/ad"},
 		Funcs: template.FuncMap{
 			"sub": func(a, b int) int {
 				return a - b

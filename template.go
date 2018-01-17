@@ -1,3 +1,11 @@
+/*
+ * Copyright 2018 Foolin.  All rights reserved.
+ *
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ *
+ */
+
 package gintemplate
 
 import (
@@ -43,7 +51,7 @@ func Default() *TemplateEngine {
 	return New(TemplateConfig{
 		Root:         "views",
 		Extension:    ".html",
-		Master:       "master",
+		Master:       "layouts/master",
 		Partials:     []string{},
 		Funcs:        make(template.FuncMap),
 		DisableCache: false,

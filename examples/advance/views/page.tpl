@@ -4,11 +4,12 @@
 <html>
     <head>
         <title>{{.title}}</title>
-        {{template "head" .}}
+        {{include "layouts/head"}}
     </head>
 
     <body>
         <a href="/"><- Back home!</a>
+        {{template "ad" .}}
         <hr>
         {{include "layouts/footer"}}
     </body>
