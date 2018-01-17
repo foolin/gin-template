@@ -1,9 +1,10 @@
-<!-- /views/page_file.html -->
+<!-- /views/page.html -->
 <!doctype html>
 
 <html>
     <head>
         <title>{{.title}}</title>
+        {{template "head" .}}
     </head>
 
     <body>

@@ -40,7 +40,7 @@ c.HTML(http.StatusOK, "index", gin.H{})
 ### Render only file(not use master layout)
 ```go
 //use full name with extension
-c.HTML(http.StatusOK, "page_file.tpl", gin.H{})
+c.HTML(http.StatusOK, "page.tpl", gin.H{})
 ```
 
 
@@ -86,16 +86,27 @@ func main() {
 	})
 
 
-	router.GET("/page_file", func(ctx *gin.Context) {
+	router.GET("/page", func(ctx *gin.Context) {
 		//render only file, must full name with extension
-		ctx.HTML(http.StatusOK, "page_file.html", gin.H{"title": "Page file title!!"})
+		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "Page file title!!"})
 	})
 
 	router.Run(":9090")
 }
 
-
 ```
+
+Project structure:
+```go
+|-- app/views/
+    |-- layouts/
+        |--- footer.html
+    |--- index.html          
+    |--- page.html
+
+See in "examples/basic" folder
+```
+
 [Basic example](https://github.com/foolin/gin-template/tree/master/examples/basic)
 
 ## Advance example
@@ -137,13 +148,27 @@ func main() {
 		})
 	})
 
-	router.GET("/page_file", func(ctx *gin.Context) {
+	router.GET("/page", func(ctx *gin.Context) {
 		//render only file, must full name with extension
-		ctx.HTML(http.StatusOK, "page_file.tpl", gin.H{"title": "Page file title!!"})
+		ctx.HTML(http.StatusOK, "page.tpl", gin.H{"title": "Page file title!!"})
 	})
 
 	router.Run(":9090")
 }
 
 ```
+
+Project structure:
+```go
+|-- app/views/
+    |-- layouts/
+        |--- footer.tpl
+    |-- partials/
+            |--- head.tpl
+    |--- index.tpl          
+    |--- page.tpl
+
+See in "examples/advance" folder
+```
+
 [Advance example](https://github.com/foolin/gin-template/tree/master/examples/advance)

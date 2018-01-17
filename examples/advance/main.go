@@ -5,6 +5,7 @@ import (
 	"github.com/foolin/gin-template"
 	"net/http"
 	"html/template"
+	"time"
 )
 
 func main() {
@@ -20,6 +21,9 @@ func main() {
 			"sub": func(a, b int) int {
 				return a - b
 			},
+			"copy": func() string{
+				return time.Now().Format("2006")
+			},
 		},
 		DisableCache: true,
 	})
@@ -34,9 +38,9 @@ func main() {
 		})
 	})
 
-	router.GET("/page_file", func(ctx *gin.Context) {
+	router.GET("/page", func(ctx *gin.Context) {
 		//render only file, must full name with extension
-		ctx.HTML(http.StatusOK, "page_file.tpl", gin.H{"title": "Page file title!!"})
+		ctx.HTML(http.StatusOK, "page.tpl", gin.H{"title": "Page file title!!"})
 	})
 
 	router.Run(":9090")

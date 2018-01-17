@@ -23,9 +23,9 @@ func main() {
 	})
 
 
-	router.GET("/page_file", func(ctx *gin.Context) {
+	router.GET("/page", func(ctx *gin.Context) {
 		//render only file, must full name with extension
-		ctx.HTML(http.StatusOK, "page_file.html", gin.H{"title": "Page file title!!"})
+		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "Page file title!!"})
 	})
 
 	router.Run(":9090")
