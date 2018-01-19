@@ -126,11 +126,12 @@ func main() {
 Project structure:
 ```go
 |-- app/views/
+	|--- index.html          
+	|--- page.html
     |-- layouts/
         |--- footer.html
         |--- master.html
-    |--- index.html          
-    |--- page.html
+    
 
 See in "examples/basic" folder
 ```
@@ -193,14 +194,15 @@ func main() {
 Project structure:
 ```go
 |-- app/views/
+	|--- index.tpl          
+	|--- page.tpl
     |-- layouts/
         |--- footer.tpl
         |--- head.tpl
         |--- master.tpl
     |-- partials/
         |--- ad.tpl
-    |--- index.tpl          
-    |--- page.tpl
+    
 
 See in "examples/advance" folder
 ```
@@ -278,21 +280,21 @@ func main() {
 Project structure:
 ```go
 |-- app/views/
-	|-- fontend
+	|-- fontend/
+		|--- index.html
         |-- layouts/
             |--- footer.html
             |--- head.html
             |--- master.html
         |-- partials/
             |--- ad.html
-        |--- index.html
-	|-- backend
+        
+	|-- backend/
+		|--- index.html
         |-- layouts/
             |--- footer.html
             |--- head.html
             |--- master.html
-        |--- index.html
-        
         
 See in "examples/multiple" folder
 ```
