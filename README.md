@@ -126,8 +126,8 @@ func main() {
 Project structure:
 ```go
 |-- app/views/
-	|--- index.html          
-	|--- page.html
+    |--- index.html          
+    |--- page.html
     |-- layouts/
         |--- footer.html
         |--- master.html
@@ -194,8 +194,8 @@ func main() {
 Project structure:
 ```go
 |-- app/views/
-	|--- index.tpl          
-	|--- page.tpl
+    |--- index.tpl          
+    |--- page.tpl
     |-- layouts/
         |--- footer.tpl
         |--- head.tpl
@@ -280,17 +280,16 @@ func main() {
 Project structure:
 ```go
 |-- app/views/
-	|-- fontend/
-		|--- index.html
+    |-- fontend/
+        |--- index.html
         |-- layouts/
             |--- footer.html
             |--- head.html
             |--- master.html
         |-- partials/
-            |--- ad.html
-        
-	|-- backend/
-		|--- index.html
+        |--- ad.html
+    |-- backend/
+        |--- index.html
         |-- layouts/
             |--- footer.html
             |--- head.html
