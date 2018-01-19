@@ -11,7 +11,8 @@ golang template for gin framework!
 * Support include file.
 * Support dynamic reload template(disable cache mode).
 
-
+# Docs
+See https://www.godoc.org/github.com/foolin/gin-template
 
 # Install
 ```bash
@@ -215,11 +216,12 @@ See in "examples/advance" folder
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/foolin/gin-template"
-	"net/http"
 	"html/template"
+	"net/http"
 	"time"
+
+	"github.com/foolin/gin-template"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -249,7 +251,8 @@ func main() {
 
 	//=========== Backend ===========//
 
-	backendRender := gintemplate.New(gintemplate.TemplateConfig{
+	//new middleware
+	mw := gintemplate.NewMiddleware(gintemplate.TemplateConfig{
 		Root:      "views/backend",
 		Extension: ".html",
 		Master:    "layouts/master",
@@ -264,7 +267,6 @@ func main() {
 
 	// You should use helper func `Middleware()` to set the supplied
 	// TemplateEngine and make `HTML()` work validly.
-	mw := gintemplate.Middleware(backendRender)
 	backendGroup := router.Group("/admin", mw)
 
 	backendGroup.GET("/", func(ctx *gin.Context) {
@@ -276,6 +278,7 @@ func main() {
 
 	router.Run(":9090")
 }
+
 
 ```
 
