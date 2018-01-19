@@ -10,6 +10,7 @@ golang template for gin framework!
 * Support configure cache template.
 * Support include file.
 * Support dynamic reload template(disable cache mode).
+* Support multiple template for fontend and backend.
 
 # Docs
 See https://www.godoc.org/github.com/foolin/gin-template
