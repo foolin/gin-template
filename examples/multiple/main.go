@@ -9,11 +9,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/foolin/gin-template"
-	"net/http"
 	"html/template"
+	"net/http"
 	"time"
+
+	"github.com/foolin/gin-template"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 		Master:    "layouts/master",
 		Partials:  []string{"partials/ad"},
 		Funcs: template.FuncMap{
-			"copy": func() string{
+			"copy": func() string {
 				return time.Now().Format("2006")
 			},
 		},
@@ -34,8 +35,9 @@ func main() {
 	})
 
 	router.GET("/", func(ctx *gin.Context) {
-		//render with master
-		ctx.HTML(http.StatusOK, "index", gin.H{
+		// `HTML()` is a helper func to deal with multiple TemplateEngine's.
+		// It detects the suitable TemplateEngine for each path automatically.
+		gintemplate.HTML(ctx, http.StatusOK, "index", gin.H{
 			"title": "Fontend title!",
 		})
 	})
@@ -48,20 +50,21 @@ func main() {
 		Master:    "layouts/master",
 		Partials:  []string{},
 		Funcs: template.FuncMap{
-			"copy": func() string{
+			"copy": func() string {
 				return time.Now().Format("2006")
 			},
 		},
 		DisableCache: true,
 	})
 
-	backendGroup := router.Group("/admin", func(ctx *gin.Context) {
-		ctx.Set("R", backendRender)
-	})
+	// You should use helper func `Middleware()` to set the supplied
+	// TemplateEngine and make `HTML()` work validly.
+	mw := gintemplate.Middleware(backendRender)
+	backendGroup := router.Group("/admin", mw)
 
 	backendGroup.GET("/", func(ctx *gin.Context) {
-		//render backend
-		backendRender.HTML(ctx, http.StatusOK, "index", gin.H{
+		// With the middleware, `HTML()` can detect the valid TemplateEngine.
+		gintemplate.HTML(ctx, http.StatusOK, "index", gin.H{
 			"title": "Backend title!",
 		})
 	})

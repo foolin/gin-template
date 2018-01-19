@@ -9,21 +9,25 @@
 package gintemplate
 
 import (
-	"html/template"
-	"sync"
-	"fmt"
-	"os"
-	"io"
-	"path/filepath"
-	"io/ioutil"
 	"bytes"
+	"fmt"
+	"html/template"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
+	"sync"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
 )
 
-var htmlContentType = []string{"text/html; charset=utf-8"}
+var (
+	htmlContentType   = []string{"text/html; charset=utf-8"}
+	templateEngineKey = "github.com/foolin/gin-template/templateEngine"
+)
 
 type TemplateEngine struct {
 	config   TemplateConfig
@@ -57,6 +61,22 @@ func Default() *TemplateEngine {
 		Funcs:        make(template.FuncMap),
 		DisableCache: false,
 	})
+}
+
+func HTML(ctx *gin.Context, code int, name string, data interface{}) {
+	if val, ok := ctx.Get(templateEngineKey); ok {
+		if e, ok := val.(*TemplateEngine); ok {
+			e.HTML(ctx, code, name, data)
+			return
+		}
+	}
+	ctx.HTML(code, name, data)
+}
+
+func Middleware(e *TemplateEngine) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set(templateEngineKey, e)
+	}
 }
 
 func (e *TemplateEngine) Instance(name string, data interface{}) render.Render {
