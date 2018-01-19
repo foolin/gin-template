@@ -9,11 +9,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/foolin/gin-template"
-	"net/http"
 	"html/template"
+	"net/http"
 	"time"
+
+	"github.com/foolin/gin-template"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {

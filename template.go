@@ -9,16 +9,17 @@
 package gintemplate
 
 import (
-	"html/template"
-	"sync"
-	"fmt"
-	"os"
-	"io"
-	"path/filepath"
-	"io/ioutil"
 	"bytes"
+	"fmt"
+	"html/template"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
+	"sync"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
 )
