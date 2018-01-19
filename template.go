@@ -17,9 +17,10 @@ import (
 	"path/filepath"
 	"io/ioutil"
 	"bytes"
-	"github.com/gin-gonic/gin/render"
 	"net/http"
 	"strings"
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/render"
 )
 
 var htmlContentType = []string{"text/html; charset=utf-8"}
@@ -58,25 +59,30 @@ func Default() *TemplateEngine {
 	})
 }
 
-func (r *TemplateEngine) Instance(name string, data interface{}) render.Render {
+func (e *TemplateEngine) Instance(name string, data interface{}) render.Render {
 	return TemplateRender{
-		Engine: r,
+		Engine: e,
 		Name:   name,
 		Data:   data,
 	}
 }
 
-func (r *TemplateEngine) render(out io.Writer, name string, data interface{}) error {
-	useMaster := true
-	if filepath.Ext(name) == r.config.Extension {
-		useMaster = false
-		name = strings.TrimRight(name, r.config.Extension)
-
-	}
-	return r.execute(out, name, data, useMaster)
+func (e *TemplateEngine) HTML(ctx *gin.Context, code int, name string, data interface{}) {
+	instance := e.Instance(name, data)
+	ctx.Render(code, instance)
 }
 
-func (r *TemplateEngine) execute(out io.Writer, name string, data interface{}, useMaster bool) error {
+func (e *TemplateEngine) executeRender(out io.Writer, name string, data interface{}) error {
+	useMaster := true
+	if filepath.Ext(name) == e.config.Extension {
+		useMaster = false
+		name = strings.TrimRight(name, e.config.Extension)
+
+	}
+	return e.executeTemplate(out, name, data, useMaster)
+}
+
+func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interface{}, useMaster bool) error {
 	var tpl *template.Template
 	var err error
 	var ok bool
@@ -84,42 +90,42 @@ func (r *TemplateEngine) execute(out io.Writer, name string, data interface{}, u
 	allFuncs := make(template.FuncMap, 0)
 	allFuncs["include"] = func(layout string) (template.HTML, error) {
 		buf := new(bytes.Buffer)
-		err := r.execute(buf, layout, data, false)
+		err := e.executeTemplate(buf, layout, data, false)
 		return template.HTML(buf.String()), err
 	}
 
 	// Get the plugin collection
-	for k, v := range r.config.Funcs {
+	for k, v := range e.config.Funcs {
 		allFuncs[k] = v
 	}
 
-	r.tplMutex.RLock()
-	tpl, ok = r.tplMap[name]
-	r.tplMutex.RUnlock()
+	e.tplMutex.RLock()
+	tpl, ok = e.tplMap[name]
+	e.tplMutex.RUnlock()
 
 	exeName := name
-	if useMaster && r.config.Master != "" {
-		exeName = r.config.Master
+	if useMaster && e.config.Master != "" {
+		exeName = e.config.Master
 	}
 
-	if !ok || r.config.DisableCache {
+	if !ok || e.config.DisableCache {
 		tplList := []string{name}
 		if useMaster {
 			//render()
-			if r.config.Master != "" {
-				tplList = append(tplList, r.config.Master)
+			if e.config.Master != "" {
+				tplList = append(tplList, e.config.Master)
 			}
-			tplList = append(tplList, r.config.Partials...)
+			tplList = append(tplList, e.config.Partials...)
 		} else {
 			//renderFile()
-			tplList = append(tplList, r.config.Partials...)
+			tplList = append(tplList, e.config.Partials...)
 		}
 
 		// Loop through each template and test the full path
 		tpl = template.New(name)
 		for _, v := range tplList {
 			// Get the absolute path of the root template
-			path, err := filepath.Abs(r.config.Root + string(os.PathSeparator) + v + r.config.Extension)
+			path, err := filepath.Abs(e.config.Root + string(os.PathSeparator) + v + e.config.Extension)
 			if err != nil {
 				return fmt.Errorf("TemplateEngine path:%v error: %v", path, err)
 			}
@@ -134,9 +140,9 @@ func (r *TemplateEngine) execute(out io.Writer, name string, data interface{}, u
 				return fmt.Errorf("TemplateEngine render parser name:%v, path:%v, error: %v", v, path, err)
 			}
 		}
-		r.tplMutex.Lock()
-		r.tplMap[name] = tpl
-		r.tplMutex.Unlock()
+		e.tplMutex.Lock()
+		e.tplMap[name] = tpl
+		e.tplMutex.Unlock()
 	}
 
 	// Display the content to the screen
@@ -155,7 +161,7 @@ type TemplateRender struct {
 }
 
 func (r TemplateRender) Render(w http.ResponseWriter) error {
-	return r.Engine.render(w, r.Name, r.Data)
+	return r.Engine.executeRender(w, r.Name, r.Data)
 }
 
 func (r TemplateRender) WriteContentType(w http.ResponseWriter) {
