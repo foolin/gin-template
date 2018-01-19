@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/foolin/gin-template?status.png)](https://godoc.org/github.com/foolin/gin-template)
 
-golang template for gin framework!
+Golang template for gin framework!
 
 
 # Feature

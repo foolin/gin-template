@@ -6,6 +6,11 @@
  *
  */
 
+/*
+Golang template for gin framework, Use golang html/template syntax,
+Easy and simple to use for gin framework, See https://github.com/foolin/gin-template
+for more information.
+*/
 package gintemplate
 
 import (
