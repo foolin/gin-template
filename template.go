@@ -63,6 +63,8 @@ func Default() *TemplateEngine {
 	})
 }
 
+// You should use helper func `Middleware()` to set the supplied
+// TemplateEngine and make `HTML()` work validly.
 func HTML(ctx *gin.Context, code int, name string, data interface{}) {
 	if val, ok := ctx.Get(templateEngineKey); ok {
 		if e, ok := val.(*TemplateEngine); ok {
@@ -71,6 +73,11 @@ func HTML(ctx *gin.Context, code int, name string, data interface{}) {
 		}
 	}
 	ctx.HTML(code, name, data)
+}
+
+//New gin middleware for func `gintemplate.HTML()`
+func NewMiddleware(config TemplateConfig) gin.HandlerFunc {
+	return Middleware(New(config))
 }
 
 func Middleware(e *TemplateEngine) gin.HandlerFunc {

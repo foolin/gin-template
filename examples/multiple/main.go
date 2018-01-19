@@ -44,7 +44,8 @@ func main() {
 
 	//=========== Backend ===========//
 
-	backendRender := gintemplate.New(gintemplate.TemplateConfig{
+	//new middleware
+	mw := gintemplate.NewMiddleware(gintemplate.TemplateConfig{
 		Root:      "views/backend",
 		Extension: ".html",
 		Master:    "layouts/master",
@@ -59,7 +60,6 @@ func main() {
 
 	// You should use helper func `Middleware()` to set the supplied
 	// TemplateEngine and make `HTML()` work validly.
-	mw := gintemplate.Middleware(backendRender)
 	backendGroup := router.Group("/admin", mw)
 
 	backendGroup.GET("/", func(ctx *gin.Context) {
