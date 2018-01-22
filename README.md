@@ -72,13 +72,13 @@ func main() {
 ### Render with master
 The `ctx` is instance of  `*gin.Context`
 ```go
-//use name without extension
+//use name without extension `.html`
 ctx.HTML(http.StatusOK, "index", gin.H{})
 ```
 
 ### Render only file(not use master layout)
 ```go
-//use full name with extension
+//use full name with extension `.html`
 ctx.HTML(http.StatusOK, "page.html", gin.H{})
 ```
 
