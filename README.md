@@ -70,23 +70,23 @@ func main() {
 # Render
 
 ### Render with master
+The `ctx` is instance of  `*gin.Context`
 ```go
 //use name without extension
-c.HTML(http.StatusOK, "index", gin.H{})
+ctx.HTML(http.StatusOK, "index", gin.H{})
 ```
 
 ### Render only file(not use master layout)
 ```go
 //use full name with extension
-c.HTML(http.StatusOK, "page.html", gin.H{})
+ctx.HTML(http.StatusOK, "page.html", gin.H{})
 ```
 
 
 # Include syntax
-```html
-<div>
+```go
+//template file
 {{include "layouts/footer"}}
-</div>
 ```
 
 # Examples
