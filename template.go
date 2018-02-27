@@ -165,13 +165,11 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 			if err != nil {
 				return fmt.Errorf("TemplateEngine render read name:%v, path:%v, error: %v", v, path, err)
 			}
-			t := tpl.New(v)
 			content := fmt.Sprintf("%s", data)
-			_, err = t.Funcs(allFuncs).Parse(content)
+			tpl, err = tpl.New(v).Funcs(allFuncs).Parse(content)
 			if err != nil {
 				return fmt.Errorf("TemplateEngine render parser name:%v, path:%v, error: %v", v, path, err)
 			}
-			tpl = t
 		}
 		e.tplMutex.Lock()
 		e.tplMap[name] = tpl
