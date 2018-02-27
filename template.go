@@ -171,6 +171,7 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 			if err != nil {
 				return fmt.Errorf("TemplateEngine render parser name:%v, path:%v, error: %v", v, path, err)
 			}
+			tpl = t
 		}
 		e.tplMutex.Lock()
 		e.tplMap[name] = tpl
