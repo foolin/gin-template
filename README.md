@@ -309,3 +309,8 @@ See in "examples/multiple" folder
 ```
 
 [Multiple example](https://github.com/foolin/gin-template/tree/master/examples/multiple)
+
+
+# Relative Template
+
+- [Echo template](https://github.com/foolin/echo-template) The sample template for echo framework!
