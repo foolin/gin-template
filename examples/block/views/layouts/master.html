@@ -1,0 +1,19 @@
+<!-- /views/admin/master.html -->
+<!doctype html>
+
+<html>
+    <head>
+        <title>{{.title}}</title>
+    </head>
+
+    <body>
+        {{block "head" .}}
+            <!-- default head value -->
+            Default head content! (master.html)
+        {{end}}
+        <hr>
+        {{template "content" .}}
+        <hr>
+        {{block "foot" .}}Default foot content! (master.html){{end}}
+    </body>
+</html>

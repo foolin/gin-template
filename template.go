@@ -141,20 +141,18 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 	}
 
 	if !ok || e.config.DisableCache {
-		tplList := []string{name}
+		tplList := make([]string, 0)
 		if useMaster {
 			//render()
 			if e.config.Master != "" {
 				tplList = append(tplList, e.config.Master)
 			}
-			tplList = append(tplList, e.config.Partials...)
-		} else {
-			//renderFile()
-			tplList = append(tplList, e.config.Partials...)
 		}
+		tplList = append(tplList, name)
+		tplList = append(tplList, e.config.Partials...)
 
 		// Loop through each template and test the full path
-		tpl = template.New(name)
+		tpl = template.New(name).Funcs(allFuncs)
 		for _, v := range tplList {
 			// Get the absolute path of the root template
 			path, err := filepath.Abs(e.config.Root + string(os.PathSeparator) + v + e.config.Extension)
@@ -165,8 +163,13 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 			if err != nil {
 				return fmt.Errorf("TemplateEngine render read name:%v, path:%v, error: %v", v, path, err)
 			}
-			content := fmt.Sprintf("%s", data)
-			tpl, err = tpl.New(v).Funcs(allFuncs).Parse(content)
+			var tmpl *template.Template
+			if v == name {
+				tmpl = tpl
+			} else {
+				tmpl = tpl.New(v)
+			}
+			_, err = tmpl.Parse(string(data))
 			if err != nil {
 				return fmt.Errorf("TemplateEngine render parser name:%v, path:%v, error: %v", v, path, err)
 			}

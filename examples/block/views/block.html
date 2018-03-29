@@ -1,0 +1,17 @@
+<!-- /views/block.html -->
+{{define "head"}}
+I'm block head!
+{{end}}
+
+{{define "content"}}
+    <a href="/"><- Back home!</a>
+    <hr>
+    <p>This page define：
+    <pre> {{`{{define "head"}} I'm block head!{{end}}`}}</pre>
+    <pre> {{`{{define "foot"}} I'm block foot!{{end}}`}}</pre>
+    So, it's output define content!</p>
+{{end}}
+
+{{define "foot"}}
+    I'm block foot!
+{{end}}
