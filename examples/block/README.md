@@ -1,5 +1,5 @@
 # Basic
-Exmaple for echo template
+Exmaple for gin template
 
 # Run
 ```go
