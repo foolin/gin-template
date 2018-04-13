@@ -32,12 +32,28 @@ import (
 var (
 	htmlContentType   = []string{"text/html; charset=utf-8"}
 	templateEngineKey = "github.com/foolin/gin-template/templateEngine"
+	DefaultConfig = TemplateConfig{
+		Root:         "views",
+		Extension:    ".html",
+		Master:       "layouts/master",
+		Partials:     []string{},
+		Funcs:        make(template.FuncMap),
+		DisableCache: false,
+		Delims:       Delims{Left: "{{", Right: "}}"},
+	}
 )
 
 type TemplateEngine struct {
 	config   TemplateConfig
 	tplMap   map[string]*template.Template
 	tplMutex sync.RWMutex
+	fileHandler FileHandler
+}
+
+type TemplateRender struct {
+	Engine *TemplateEngine
+	Name   string
+	Data   interface{}
 }
 
 type TemplateConfig struct {
@@ -55,6 +71,8 @@ type Delims struct {
 	Right string
 }
 
+type FileHandler func(config TemplateConfig, tplFile string) (content string, err error)
+
 func New(config TemplateConfig) *TemplateEngine {
 	return &TemplateEngine{
 		config:   config,
@@ -64,15 +82,7 @@ func New(config TemplateConfig) *TemplateEngine {
 }
 
 func Default() *TemplateEngine {
-	return New(TemplateConfig{
-		Root:         "views",
-		Extension:    ".html",
-		Master:       "layouts/master",
-		Partials:     []string{},
-		Funcs:        make(template.FuncMap),
-		DisableCache: false,
-		Delims:       Delims{Left: "{{", Right: "}}"},
-	})
+	return New(DefaultConfig)
 }
 
 // You should use helper func `Middleware()` to set the supplied
@@ -161,14 +171,10 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 		// Loop through each template and test the full path
 		tpl = template.New(name).Funcs(allFuncs).Delims(e.config.Delims.Left, e.config.Delims.Right)
 		for _, v := range tplList {
-			// Get the absolute path of the root template
-			path, err := filepath.Abs(e.config.Root + string(os.PathSeparator) + v + e.config.Extension)
+			var data string
+			data, err = e.fileHandler(e.config, v)
 			if err != nil {
-				return fmt.Errorf("TemplateEngine path:%v error: %v", path, err)
-			}
-			data, err := ioutil.ReadFile(path)
-			if err != nil {
-				return fmt.Errorf("TemplateEngine render read name:%v, path:%v, error: %v", v, path, err)
+				return err
 			}
 			var tmpl *template.Template
 			if v == name {
@@ -176,9 +182,9 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 			} else {
 				tmpl = tpl.New(v)
 			}
-			_, err = tmpl.Parse(string(data))
+			_, err = tmpl.Parse(data)
 			if err != nil {
-				return fmt.Errorf("TemplateEngine render parser name:%v, path:%v, error: %v", v, path, err)
+				return fmt.Errorf("TemplateEngine render parser name:%v, error: %v", v, err)
 			}
 		}
 		e.tplMutex.Lock()
@@ -195,10 +201,11 @@ func (e *TemplateEngine) executeTemplate(out io.Writer, name string, data interf
 	return nil
 }
 
-type TemplateRender struct {
-	Engine *TemplateEngine
-	Name   string
-	Data   interface{}
+func (e *TemplateEngine) SetFileHandler(handle FileHandler) {
+	if handle == nil {
+		panic("FileHandler can't set nil!")
+	}
+	e.fileHandler = handle
 }
 
 func (r TemplateRender) Render(w http.ResponseWriter) error {
@@ -209,5 +216,20 @@ func (r TemplateRender) WriteContentType(w http.ResponseWriter) {
 	header := w.Header()
 	if val := header["Content-Type"]; len(val) == 0 {
 		header["Content-Type"] = htmlContentType
+	}
+}
+
+func DefaultFileHandler() FileHandler {
+	return func(config TemplateConfig, tplFile string) (content string, err error) {
+		// Get the absolute path of the root template
+		path, err := filepath.Abs(config.Root + string(os.PathSeparator) + tplFile + config.Extension)
+		if err != nil {
+			return "", fmt.Errorf("TemplateEngine path:%v error: %v", path, err)
+		}
+		data, err := ioutil.ReadFile(path)
+		if err != nil {
+			return "", fmt.Errorf("TemplateEngine render read name:%v, path:%v, error: %v", tplFile, path, err)
+		}
+		return string(data), nil
 	}
 }

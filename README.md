@@ -15,6 +15,7 @@ Golang template for [gin framework](https://github.com/gin-gonic/gin)!
 * Support include file.
 * Support dynamic reload template(disable cache mode).
 * Support multiple templates for fontend and backend.
+* Support [go.rice](https://github.com/foolin/gin-template/tree/master/supports/gorice) add all resource files to a executable.
 
 # Docs
 See https://www.godoc.org/github.com/foolin/gin-template
@@ -371,6 +372,81 @@ See in "examples/block" folder
 
 [Block example](https://github.com/foolin/gin-template/tree/master/examples/block)
 
+### go.rice example
+```go
+
+/*
+ * Copyright 2018 Foolin.  All rights reserved.
+ *
+ * Use of this source code is governed by a MIT style
+ * license that can be found in the LICENSE file.
+ *
+ */
+
+package main
+
+import (
+	"net/http"
+	"github.com/GeertJohan/go.rice"
+	"github.com/foolin/gin-template/supports/gorice"
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+
+	router := gin.Default()
+
+	// servers other static files
+	staticBox := rice.MustFindBox("static")
+	router.StaticFS("/static", staticBox.HTTPBox())
+
+	//new template engine
+	router.HTMLRender = gorice.New(rice.MustFindBox("views"))
+
+	// Routes
+	router.GET("/", func(c *gin.Context) {
+		//render with master
+		c.HTML(http.StatusOK, "index", gin.H{
+			"title": "Index title!",
+			"add": func(a int, b int) int {
+				return a + b
+			},
+		})
+	})
+
+	router.GET("/page", func(c *gin.Context) {
+		//render only file, must full name with extension
+		c.HTML(http.StatusOK, "page.html", gin.H{"title": "Page file title!!"})
+	})
+
+	// Start server
+	router.Run(":9090")
+}
+
+
+
+```
+
+Project structure:
+```go
+|-- app/views/
+    |--- index.html          
+    |--- page.html
+    |-- layouts/
+        |--- footer.html
+        |--- master.html
+|-- app/static/  
+    |-- css/
+        |--- bootstrap.css   	
+    |-- img/
+        |--- gopher.png
+
+See in "examples/gorice" folder
+```
+
+[gorice example](https://github.com/foolin/gin-template/tree/master/examples/gorice)
+
+
 # Relative Template
 
-- [Echo template](https://github.com/foolin/echo-template) The sample template for echo framework!
+- [Echo template](https://github.com/foolin/gin-template) The sample template for gin framework!
