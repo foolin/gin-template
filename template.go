@@ -78,6 +78,7 @@ func New(config TemplateConfig) *TemplateEngine {
 		config:   config,
 		tplMap:   make(map[string]*template.Template),
 		tplMutex: sync.RWMutex{},
+		fileHandler: DefaultFileHandler(),
 	}
 }
 
