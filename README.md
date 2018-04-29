@@ -446,6 +446,9 @@ See in "examples/gorice" folder
 
 [gorice example](https://github.com/foolin/gin-template/tree/master/examples/gorice)
 
+# Supports
+
+- [go.rice](https://github.com/foolin/gin-template/tree/master/supports/gorice)
 
 # Relative Template
 
