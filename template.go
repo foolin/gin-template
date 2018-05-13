@@ -126,7 +126,7 @@ func (e *TemplateEngine) executeRender(out io.Writer, name string, data interfac
 	useMaster := true
 	if filepath.Ext(name) == e.config.Extension {
 		useMaster = false
-		name = strings.TrimRight(name, e.config.Extension)
+		name = strings.TrimSuffix(name, e.config.Extension)
 
 	}
 	return e.executeTemplate(out, name, data, useMaster)
