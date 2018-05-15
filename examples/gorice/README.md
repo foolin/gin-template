@@ -7,17 +7,14 @@ Exmaple for gin template
 go get github.com/GeertJohan/go.rice
 ```
 
-# Build
+# Build & Run
 
 ```bash
+
+#build
 go build -o bin/gorice
-```
 
-
-# Run
-
-```bash
-
+#run
 ./bin/gorice
 
 ```
