@@ -1,5 +1,5 @@
 # Basic
-Support template for [go.rice](https://github.com/GeertJohan/go.rice/rice)
+Support template for [go.rice](https://github.com/GeertJohan/go.rice)
 
 
 # Install

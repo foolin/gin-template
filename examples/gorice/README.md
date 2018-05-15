@@ -2,12 +2,27 @@
 Exmaple for gin template
 
 
-# Install rice tool
+# Install go.rice
 ```go
-go get github.com/GeertJohan/go.rice/rice
+go get github.com/GeertJohan/go.rice
 ```
 
 # Build & Run
+
+```bash
+go build -o bin/gorice
+```
+
+
+# Run
+
+```bash
+
+./bin/gorice
+
+```
+
+# Scripts run
 ```bash
 
 ./run.sh

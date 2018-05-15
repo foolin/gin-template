@@ -19,18 +19,16 @@ Important!!! The viewsRootBox's name and config.Root must be consistent.
 func NewWithConfig(viewsRootBox *rice.Box, config gintemplate.TemplateConfig) *gintemplate.TemplateEngine {
 	config.Root = viewsRootBox.Name()
 	engine := gintemplate.New(config)
-	engine.SetFileHandler(GoRiceFileHandler())
+	engine.SetFileHandler(FileHandler(viewsRootBox))
 	return engine
 }
 
-func GoRiceFileHandler() gintemplate.FileHandler {
+/**
+ Support go.rice file handler
+ */
+func FileHandler(viewsRootBox *rice.Box) gintemplate.FileHandler {
 	return func(config gintemplate.TemplateConfig, tplFile string) (content string, err error) {
-		// find a rice.Box
-		templateBox, err := rice.FindBox(config.Root)
-		if err != nil {
-			return "", err
-		}
 		// get file contents as string
-		return templateBox.String(tplFile + config.Extension)
+		return viewsRootBox.String(tplFile + config.Extension)
 	}
 }
