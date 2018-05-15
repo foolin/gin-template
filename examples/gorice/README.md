@@ -2,12 +2,12 @@
 Exmaple for gin template
 
 
-# Install go.rice
+# Install
 ```go
 go get github.com/GeertJohan/go.rice
 ```
 
-# Build & Run
+# Build
 
 ```bash
 go build -o bin/gorice
@@ -22,7 +22,7 @@ go build -o bin/gorice
 
 ```
 
-# Scripts run
+# Script
 ```bash
 
 ./run.sh
