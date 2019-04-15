@@ -5,6 +5,7 @@
 Golang template for [gin framework](https://github.com/gin-gonic/gin)! 
 
 **Deprecated!!!**
+
 Please consider trying to migrate to [Goview](https://github.com/foolin/goview)
 
 # Goview
