@@ -4,6 +4,8 @@
 
 Golang template for [gin framework](https://github.com/gin-gonic/gin)!
 
+# Goview
+[Goview](https://github.com/foolin/goview) is a lightweight, simple and easy template library based on golang html/template for building Go web application. Please consider trying to migrate to [Goview](https://github.com/foolin/goview). 
 
 # Feature
 * Easy and simple to use for gin framework.
